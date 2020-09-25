@@ -1,68 +1,45 @@
 /*
-You've created a new programming language, and now you've decided to add hashmap support to it.
- Actually you are quite disappointed that in common programming languages it's impossible to add a number to all hashmap keys,
- or all its values. So you've decided to take matters into your own hands and implement your own hashmap in your
- new language that has the following operations:
+You are implementing your own programming language and you've decided to add support for merging strings. A typical merge function would take two strings s1 and s2, and return the lexicographically smallest result that can be obtained by placing the symbols of s2 between the symbols of s1 in such a way that maintains the relative order of the characters in each string.
 
-    insert x y - insert an object with key x and value y.
-    get x - return the value of an object with key x.
-    addToKey x - add x to all keys in map.
-    addToValue y - add y to all values in map.
+For example, if s1 = "super" and s2 = "tower", the result should be merge(s1, s2) = "stouperwer".
 
-To test out your new hashmap, you have a list of queries in the form of two arrays: queryTypes contains the names of the methods to be called (eg: insert, get, etc), and queries contains the arguments for those methods (the x and y values).
+You'd like to make your language more unique, so for your merge function, instead of comparing the characters in the usual lexicographical order, you'll compare them based on how many times they occur in their respective strings (fewer occurrences means the character is considered smaller). If the number of occurrences are equal, then the characters should be compared in the usual way. If both number of occurences and characters are equal, you should take the characters from the first string to the result.
 
-Your task is to implement this hashmap, apply the given queries, and to find the sum of all the results for get operations.
+Given two strings s1 and s2, return the result of the special merge function you are implementing.
 
 Example
 
-    For queryType = ["insert", "insert", "addToValue", "addToKey", "get"] and query = [[1, 2], [2, 3], [2], [1], [3]], the output should be hashMap(queryType, query) = 5.
+    For s1 = "dce" and s2 = "cccbd", the output should be
+    mergeStrings(s1, s2) = "dcecccbd".
 
-    The hashmap looks like this after each query:
-        1 query: {1: 2}
-        2 query: {1: 2, 2: 3}
-        3 query: {1: 4, 2: 5}
-        4 query: {2: 4, 3: 5}
-        5 query: answer is 5
+All symbols from s1 goes first, because all of them have only 1 occurrence in s1 and c has 3 occurrences in s2.
 
-    The result of the last get query for 3 is 5 in the resulting hashmap.
+    For s1 = "super" and s2 = "tower", the output should be
+    mergeStrings(s1, s2) = "stouperwer".
 
-    For queryType = ["insert", "addToValue", "get", "insert", "addToKey", "addToValue", "get"]
-    and query     = [[1, 2]  , [2]         ,   [1],   [2, 3],        [1],         [-1],   [3]],
-    the output should be hashMap(queryType, query) = 6.
-
-    The hashmap looks like this after each query:
-        1 query: {1: 2}
-        2 query: {1: 4}
-        3 query: answer is 4
-        4 query: {1: 4, 2: 3}
-        5 query: {2: 4, 3: 3}
-        6 query: {2: 3, 3: 2}
-        7 query: answer is 2
-
-    The sum of the results for all the get queries is equal to 4 + 2 = 6.
+Because in both strings all symbols occur only 1 time, strings are merged as usual. You can find explanation for this example on the image in the description.
 
 Input/Output
 
     [execution time limit] 4 seconds (js)
 
-    [input] array.string queryType
+    [input] string s1
 
-    Array of query types. It is guaranteed that each queryType[i] is either "addToKey", "addToValue", "get", or "insert".
-
-    Guaranteed constraints:
-    1 ≤ queryType.length ≤ 105.
-
-    [input] array.array.integer query
-
-    Array of queries, where each query is represented either by two numbers for insert query or by one number for other queries. It is guaranteed that during all queries all keys and values are in the range [-109, 109].
+    A string consisting only of lowercase English letters.
 
     Guaranteed constraints:
-    query.length = queryType.length,
-    1 ≤ query[i].length ≤ 2.
+    1 ≤ s1.length ≤ 104.
 
-    [output] integer64
+    [input] string s2
 
-    The sum of the results for all get queries.
+    A string consisting only of lowercase English letters.
+
+    Guaranteed constraints:
+    1 ≤ s2.length ≤ 104.
+
+    [output] string
+
+    The string that results by merging s1 and s2 using your special merge function.
 
 [JavaScript] Syntax Tips
 
@@ -73,39 +50,11 @@ function helloWorld(name) {
     return "Hello, " + name;
 }
 
+
  */
 
 function hashMap(queryTypes, queries) {
-    let map = {};
 
-    return queryTypes.reduce((sum, type, id) => {
-        const query = queries[id];
-        if (type === 'insert') {
-            map[query[0]] = query[1];
-        } else if (type === 'get') {
-            sum += map[query[0]];
-        } else if (type === 'addToKey') {
-            addToKey(map, query[0]);
-        } else if (type === 'addToValue') {
-            addToValue(map, query[0]);
-        }
-        return sum;
-    }, 0);
-
-}
-
-function addToKey(map, val) {
-    Object.getOwnPropertyNames(map).forEach((key) => {
-        const mapVal = map[key];
-        delete map[key];
-        map[+key + val] = mapVal;
-    }, {})
-}
-
-function addToValue(map, val) {
-    Object.getOwnPropertyNames(map).forEach((key) => {
-        map[key] += val;
-    }, {})
 }
 
 const tests = [
@@ -124,7 +73,8 @@ const tests = [
                 [3]],
 
         output: 5,
-    }, {
+    },
+    {
         queryType:
             ["insert",
                 "addToValue",
@@ -224,7 +174,8 @@ const tests = [
         output:
 
             6
-    }, {
+    },
+    {
         queryType:
             ["addToValue",
                 "addToValue",
@@ -309,7 +260,7 @@ const tests = [
             -3
 
         ,
-
+    }, {
 
         queryType:
             ["addToValue",
@@ -339,7 +290,7 @@ const tests = [
             -8
 
         ,
-
+    }, {
 
         queryType:
             ["addToKey",
@@ -731,7 +682,9 @@ const tests = [
 
         ,
 
-    }, {
+    },
+
+    {
 
         queryType:
             ["addToValue",
@@ -1114,7 +1067,8 @@ const tests = [
         ,
 
 
-    }, {
+    },
+    {
         queryType:
             ["insert",
                 "addToKey",
@@ -1499,13 +1453,22 @@ const tests = [
 tests.forEach((test, index) => {
     const sum = hashMap(test.queryType, test.query);
 
+    console.log('!!__ test', index,
+        '\n\t expected:', test.output
+    );
+
     if (+sum === test.output) {
-        console.log('____ test', index, 'returned', sum);
+        console.log('OK  returned:', sum);
     } else {
-        console.log('!!__ test', index, 'returned', sum, ', expected', test.output,
-            '\n\tqueryType:', test.queryType,
-            '\n\t    query:', test.query,
-            '\n',
-        );
+        console.log('ERR returned:', sum, '!==', test.output);
     }
+
+    printTest(test);
+    console.log('');
 })
+
+function printTest(test) {
+    test.queryType.forEach((type, id) => {
+        console.log(type, test.query[id]); // todo
+    });
+}
