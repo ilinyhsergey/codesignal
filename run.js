@@ -1,1 +1,2 @@
-console.log('____ asdf'); // todo
+const res = [].pop();
+console.log('____ res', res); // todo
