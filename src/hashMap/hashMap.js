@@ -72,14 +72,10 @@ function helloWorld(name) {
  */
 
 
-// todo it should works faster
 function hashMap(queryTypes, queries, testIndex) {
-    let map = new Map();
+    let map = new Map(); // keep relative offsets
+    let delta;
     let sum = 0;
-
-    // if (queryTypes.length !== queries.length) {
-    //     throw new Error('lengths not match in test ' + testIndex);
-    // }
 
 
     const len = Math.min(queryTypes.length, queries.length);
@@ -89,33 +85,37 @@ function hashMap(queryTypes, queries, testIndex) {
         const query = queries[i];
 
         if (type === 'insert') {
-            if (query.length !== 2) {
-                throw new Error('type === \'insert\' BUT queries[' + i + '].length !== 2')
+
+            if (!delta) {
+                delta = query; // [key, val]
             }
-            map.set(query[0], query[1]);
+            map.set(query[0] - delta[0], query[1] - delta[1]);
         } else if (type === 'get') {
-            if (query.length !== 1) {
-                throw new Error('type === \'get\' BUT queries[' + i + '.length !==1');
-            }
-            const val = map.get(query[0]);
-            if (val !== undefined) {
-                sum += val;
+
+            if (delta) {
+                const key = query[0];
+                const relativeKey = key - delta[0];
+                const relativeVal = map.get(relativeKey);
+                const val = (relativeVal !== undefined) ? (relativeVal + delta[1]) : undefined;
+
+                if (val !== undefined) {
+                    sum += val;
+                }
+            } else {
+                // ignore
             }
         } else if (type === 'addToKey') {
-            const dKey = query[0];
-            const newEntries = Array.from(map.entries()).map((entry) => {
-                return [entry[0] + dKey, entry[1]];
-            })
-            map = new Map(newEntries);
+
+            if (delta) {
+                delta[0] = delta[0] + query[0];
+            }
         } else if (type === 'addToValue') {
-            const dVal = query[0];
-            const newEntries = Array.from(map.entries()).map((entry) => {
-                return [entry[0], entry[1] + dVal];
-            })
-            map = new Map(newEntries);
+
+            if (delta) {
+                delta[1] = delta[1] + query[0];
+            }
         }
     }
-    ;
 
     return sum;
 
@@ -1518,17 +1518,15 @@ const tests = [
     // },
 ]
 
-tests/*.slice(1, 2)*/.forEach((test, index) => {
+tests/*.slice(1)*/.some((test, index) => {
     const sum = hashMap(test.queryType, test.query, index);
-
-    // console.log('____ test', index,
-    //     '\n\t expected:', test.output
-    // );
 
     if (+sum === test.output) {
         console.log('OK  returned:', sum);
+        return false;
     } else {
-        console.log('ERR returned:', sum, '!==', test.output);
+        console.log('ERR returned:', sum, '!==', test.output, test);
+        return true
     }
 
     // printTest(test);
