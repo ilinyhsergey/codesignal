@@ -56,13 +56,16 @@ function concat(a, b) {
 //     return +('' + a + b);
 // }
 
+// function getDigits(b) {
+//     let digitsNum = 1;
+//     let num = b;
+//     while ((num = Math.floor(num / 10)) > 0) {
+//         ++digitsNum;
+//     }
+//     return digitsNum;
+// }
 function getDigits(b) {
-    let digitsNum = 1;
-    let num = b;
-    while ((num = Math.floor(num / 10)) > 0) {
-        ++digitsNum;
-    }
-    return digitsNum;
+    return Math.floor(Math.log10(b)) + 1;
 }
 
 
