@@ -71,6 +71,8 @@ function helloWorld(name) {
 
  */
 
+
+// todo it should works faster
 function hashMap(queryTypes, queries, testIndex) {
     let map = new Map();
     let sum = 0;
