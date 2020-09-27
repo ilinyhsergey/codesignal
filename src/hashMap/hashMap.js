@@ -1537,6 +1537,6 @@ tests/*.slice(1, 2)*/.forEach((test, index) => {
 
 function printTest(test) {
     test.queryType.forEach((type, id) => {
-        console.log(type, test.query[id]); // todo
+        console.log(type, test.query[id]);
     });
 }

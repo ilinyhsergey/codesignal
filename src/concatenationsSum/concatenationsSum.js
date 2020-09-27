@@ -110,10 +110,10 @@ const tests = [
 tests.some((test, id) => {
     const res = concatenationsSum(test.a);
     if (res !== test.expectedOutput) {
-        console.log('____ test #', id, 'FAIL returned:', res, ', for test:', test); // todo
+        console.log('____ test #', id, 'FAIL returned:', res, ', for test:', test);
         return  true;
     } else {
-        console.log('____ test #', id, 'OK'); // todo
+        console.log('____ test #', id, 'OK');
         return false;
     }
 })

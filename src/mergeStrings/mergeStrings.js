@@ -169,9 +169,9 @@ tests.forEach((test, id) => {
     const res = mergeStrings(test.s1, test.s2);
 
     if (res === test.output) {
-        console.log('____ test', id, ': OK'); // todo
+        console.log('____ test', id, ': OK');
     } else {
         ++wrongCount;
-        console.log('____ test', id, ': ERROR'); // todo
+        console.log('____ test', id, ': ERROR');
     }
 })

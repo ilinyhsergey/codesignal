@@ -298,10 +298,10 @@ const tests = [
 tests.some((test, id) => {
     const res = alternatingSort(test.a);
     if(test.expectedOutput === res) {
-        console.log('____ test #', id, ' OK'); // todo
+        console.log('____ test #', id, ' OK');
         return false;
     } else {
-        console.log('____ test #', id, ' FALL, exp:', test.expectedOutput, ', return: ', res, test); // todo
+        console.log('____ test #', id, ' FALL, exp:', test.expectedOutput, ', return: ', res, test);
         return true;
     }
 })
