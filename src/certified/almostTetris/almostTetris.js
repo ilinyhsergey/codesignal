@@ -201,3 +201,13 @@ const tests = [
                 [32, 32, 32, 33, 33, 33, 23, 34, 34, 34]]
     }
 ];
+
+tests.forEach((test, id) => {
+    const response = almostTetris(test.n, test.m, test.figures);
+
+    if (response === test.expectedOutput){
+        console.log(id, ') OK');
+    } else {
+        console.log(id, ') FAIL :', response, test);
+    }
+})
